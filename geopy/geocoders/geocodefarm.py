@@ -128,10 +128,10 @@ class GeocodeFarm(Geocoder):
         places = []
         for result in results.get('RESULTS'):
             coordinates = result.get('COORDINATES', {})
-            address = result.get('ADDRESS', {})
+            #address = result.get('ADDRESS', {})
             latitude = coordinates.get('latitude', None)
             longitude = coordinates.get('longitude', None)
-            placename = address.get('address_returned', None)
+            placename = result.get('formatted_address', None)
             if placename is None:
                 placename = address.get('address', None)
             if latitude and longitude:
