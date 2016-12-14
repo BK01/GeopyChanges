@@ -5,6 +5,7 @@
 import base64
 import hashlib
 import hmac
+import Calculation
 from geopy.compat import urlencode
 from geopy.geocoders.base import Geocoder, DEFAULT_TIMEOUT, DEFAULT_SCHEME
 from geopy.exc import (
@@ -151,13 +152,14 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
     def geocode(
             self,
             query,
-            exactly_one=True,
+	    userlocation,
+            exactly_one=False,
             timeout=None,
             bounds=None,
             region=None,
             components=None,
             language=None,
-            sensor=False,
+            sensor=False,	    
         ):  # pylint: disable=W0221,R0913
         """
         Geocode a location query.
@@ -214,16 +216,15 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             url = "?".join((self.api, urlencode(params)))
         else:
             url = self._get_signed_url(params)
-
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
         )
 
     def reverse(
             self,
             query,
-            exactly_one=False,
+            exactly_one=True,
             timeout=None,
             language=None,
             sensor=False,
@@ -266,7 +267,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
 
         logger.debug("%s.reverse: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout), userlocation,exactly_one
         )
 
     def timezone(self, location, at_time=None, timeout=None):
@@ -333,9 +334,9 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             )
         return tz
 
-    def _parse_json(self, page, exactly_one=True):
+    def _parse_json(self, page,userlocation, exactly_one=False):
         '''Returns location, (latitude, longitude) from json feed.'''
-
+	temparray = []
         places = page.get('results', [])
         if not len(places):
             self._check_status(page.get('status'))
@@ -347,11 +348,14 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             latitude = place['geometry']['location']['lat']
             longitude = place['geometry']['location']['lng']
             return Location(location, (latitude, longitude), place)
+	for place in places:
+		temparray.append(parse_place(place))
+	resultplace = Calculation.calculations(userlocation,temparray)
 
         if exactly_one:
-            return parse_place(places[0])
+            return resultplace[0]
         else:
-            return [parse_place(place) for place in places]
+            return resultplace
 
     @staticmethod
     def _check_status(status):
