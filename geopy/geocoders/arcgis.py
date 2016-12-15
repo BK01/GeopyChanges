@@ -92,6 +92,10 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             '%s://geocode.arcgis.com/arcgis/rest/services/'
             'World/GeocodeServer/find' % self.scheme
         )
+        self.api_multi = (
+            '%s://geocode.arcgis.com/arcgis/rest/services/'
+            'World/GeocodeServer/findAddressCandidates' % self.scheme
+        )
         self.reverse_api = (
             '%s://geocode.arcgis.com/arcgis/rest/services/'
             'World/GeocodeServer/reverseGeocode' % self.scheme
@@ -123,10 +127,13 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             exception. Set this only if you wish to override, on this call
             only, the value set during the geocoder's initialization.
         """
-        params = {'text': query, 'f': 'json'}
+        
         if exactly_one is True:
-            params['maxLocations'] = 1
-        url = "?".join((self.api, urlencode(params)))
+            params = {'text': query, 'maxLocations':1, 'f': 'json'}
+            url = "?".join((self.api, urlencode(params)))
+        else:
+            params = {'SingleLine': query, 'f': 'json'}
+            url = "?".join((self.api_multi, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         response = self._call_geocoder(url, timeout=timeout)
 
@@ -141,16 +148,29 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             raise GeocoderServiceError(str(response['error']))
 
         # Success; convert from the ArcGIS JSON format.
-        if not len(response['locations']):
-            return None
-        geocoded = []
-        for resource in response['locations']:
-            geometry = resource['feature']['geometry']
-            geocoded.append(
-                Location(
-                    resource['name'], (geometry['y'], geometry['x']), resource
+        if exactly_one is True:
+            if not len(response['locations']):
+                return None
+            geocoded = []
+            for resource in response['locations']:
+                geometry = resource['feature']['geometry']
+                geocoded.append(
+                    Location(
+                        resource['name'], (geometry['y'], geometry['x']), resource
+                    )
                 )
-            )
+        else:
+            if not len(response['candidates']):
+                return None
+            geocoded = []
+            for resource in response['candidates']:
+                geometry = resource['location']
+                geocoded.append(
+                    Location(
+                        resource['address'], (geometry['y'], geometry['x']), resource
+                    )
+                )
+
         if exactly_one is True:
             return geocoded[0]
         return geocoded
