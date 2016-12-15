@@ -217,7 +217,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
                          'postcode', 'street', 'city',
                          'state', 'country']
         name = [resource['properties'].get(k) for k
-                in name_elements if resource.get(k)]
+                in name_elements if resource['properties'].get(k)]
         location = ', '.join(name)
 
         latitude = resource['geometry']['coordinates'][1] or None
