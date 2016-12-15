@@ -152,7 +152,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
     def geocode(
             self,
             query,
-	    userlocation,
+	    userlocation= None,
             exactly_one=False,
             timeout=None,
             bounds=None,
@@ -348,14 +348,21 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             latitude = place['geometry']['location']['lat']
             longitude = place['geometry']['location']['lng']
             return Location(location, (latitude, longitude), place)
-	for place in places:
-		temparray.append(parse_place(place))
-	resultplace = Calculation.calculations(userlocation,temparray)
+	
+	if userlocation is None:
+		if exactly_one:
+            		return parse_place(places[0])
+        	else:
+			return [parse_place(place) for place in places]
+	else:
+		for place in places:
+			temparray.append(parse_place(place))
+		resultplace = Calculation.calculations(userlocation,temparray)
 
-        if exactly_one:
-            return resultplace[0]
-        else:
-            return resultplace
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
 
     @staticmethod
     def _check_status(status):

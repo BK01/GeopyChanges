@@ -12,6 +12,7 @@ from geopy.compat import urlencode
 from geopy.location import Location
 from geopy.util import logger
 from geopy.exc import GeocoderQueryError
+import Calculation
 
 
 __all__ = ("Nominatim", )
@@ -87,7 +88,8 @@ class Nominatim(Geocoder):
 
     def geocode(
             self,
-            query,
+	    query,
+	    userlocation=None,
             exactly_one=True,
             timeout=None,
             addressdetails=False,
@@ -190,7 +192,7 @@ class Nominatim(Geocoder):
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
         )
 
     def reverse(
@@ -261,14 +263,25 @@ class Nominatim(Geocoder):
             longitude = float(longitude)
         return Location(placename, (latitude, longitude), place)
 
-    def _parse_json(self, places, exactly_one):
+    def _parse_json(self, places,userlocation, exactly_one):
+	temparray=[]
         if places is None:
             return None
         if not isinstance(places, list):
             places = [places]
         if not len(places):
             return None
-        if exactly_one is True:
-            return self.parse_code(places[0])
-        else:
-            return [self.parse_code(place) for place in places]
+	if userlocation is None:
+		if exactly_one:
+            		return self.parse_code(places[0])
+        	else:
+			return [self.parse_code(place) for place in places]
+	else:
+		for place in places:
+			temparray.append(self.parse_code(place))
+		resultplace = Calculation.calculations(userlocation,temparray)
+
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace

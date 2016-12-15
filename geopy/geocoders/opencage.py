@@ -10,6 +10,7 @@ from geopy.exc import (
 )
 from geopy.location import Location
 from geopy.util import logger
+import Calculation
 
 
 __all__ = ("OpenCage", )
@@ -64,6 +65,7 @@ class OpenCage(Geocoder):
     def geocode(
             self,
             query,
+	    userlocation=None,
             bounds=None,
             country=None,
             language=None,
@@ -119,7 +121,7 @@ class OpenCage(Geocoder):
 
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
         )
 
     def reverse(
@@ -161,9 +163,9 @@ class OpenCage(Geocoder):
             self._call_geocoder(url, timeout=timeout), exactly_one
         )
 
-    def _parse_json(self, page, exactly_one=True):
+    def _parse_json(self, page,userlocation, exactly_one=True):
         '''Returns location, (latitude, longitude) from json feed.'''
-
+	temparray=[]
         places = page.get('results', [])
         if not len(places):
             self._check_status(page.get('status'))
@@ -175,11 +177,24 @@ class OpenCage(Geocoder):
             latitude = place['geometry']['lat']
             longitude = place['geometry']['lng']
             return Location(location, (latitude, longitude), place)
+	if userlocation is None:
+		if exactly_one:
+            		return parse_place(places[0])
+        	else:
+			return [parse_place(place) for place in places]
+	else:
+		for place in places:
+			temparray.append(parse_place(place))
+		resultplace = Calculation.calculations(userlocation,temparray)
 
-        if exactly_one:
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
+        '''if exactly_one:
             return parse_place(places[0])
         else:
-            return [parse_place(place) for place in places]
+            return [parse_place(place) for place in places]'''
 
     @staticmethod
     def _check_status(status):

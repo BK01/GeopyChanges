@@ -11,6 +11,7 @@ from geopy.geocoders.base import (
 )
 from geopy.location import Location
 from geopy.util import logger
+import Calculation
 
 
 __all__ = ("Photon", )
@@ -67,6 +68,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
     def geocode(
             self,
             query,
+	    userlocation=None,
             exactly_one=True,
             timeout=None,
             location_bias=None,
@@ -133,7 +135,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
         url = "?".join((self.api, urlencode(params, doseq=True)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),
+            self._call_geocoder(url, timeout=timeout),userlocation,
             exactly_one
         )
 
@@ -196,12 +198,28 @@ class Photon(Geocoder):  # pylint: disable=W0223
         )
 
     @classmethod
-    def _parse_json(cls, resources, exactly_one=True):
+    def _parse_json(cls, resources,userlocation,exactly_one=True):
         """
         Parse display name, latitude, and longitude from a JSON response.
         """
+	temparray=[]
         if not len(resources):  # pragma: no cover
             return None
+	if userlocation is None:
+		if exactly_one:
+            		return cls.parse_resource(resources['features'][0])
+        	else:
+			return [parse_place(place) for place in places]
+	else:
+		for resource in resources['features']:
+			temparray.append(cls.parse_resource(resource))
+		resultplace = Calculation.calculations(userlocation,temparray)
+
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
+
         if exactly_one:
             return cls.parse_resource(resources['features'][0])
         else:

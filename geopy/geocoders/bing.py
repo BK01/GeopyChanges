@@ -14,7 +14,7 @@ from geopy.exc import (
     GeocoderServiceError,
 )
 from geopy.util import logger, join_filter
-
+import Calculation
 
 __all__ = ("Bing", )
 
@@ -78,6 +78,7 @@ class Bing(Geocoder):
     def geocode(
             self,
             query,
+	    userlocation = None,
             exactly_one=True,
             user_location=None,
             timeout=None,
@@ -156,7 +157,7 @@ class Bing(Geocoder):
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),
+            self._call_geocoder(url, timeout=timeout),userlocation,
             exactly_one
         )
 
@@ -190,10 +191,11 @@ class Bing(Geocoder):
         )
 
     @staticmethod
-    def _parse_json(doc, exactly_one=True):  # pylint: disable=W0221
+    def _parse_json(doc,userlocation, exactly_one=True):  # pylint: disable=W0221
         """
         Parse a location name, latitude, and longitude from an JSON response.
         """
+	temparray = []
         status_code = doc.get("statusCode", 200)
         if status_code != 200:
             err = doc.get("errorDetails", "")
@@ -216,6 +218,7 @@ class Bing(Geocoder):
             """
             Parse each return object.
             """
+	    
             stripchars = ", \n"
             addr = resource['address']
 
@@ -236,8 +239,23 @@ class Bing(Geocoder):
                 longitude = float(longitude)
 
             return Location(location, (latitude, longitude), resource)
+	if userlocation is None:
+		if exactly_one:
+		    return parse_resource(resources[0])
+		else:
+		    return [parse_resource(resource) for resource in resources]
+	else:
+		for resource in resources:
+			temparray.append(parse_resource(resource))
+		resultplace = Calculation.calculations(userlocation,temparray)
 
-        if exactly_one:
-            return parse_resource(resources[0])
-        else:
-            return [parse_resource(resource) for resource in resources]
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
+
+
+
+
+
+

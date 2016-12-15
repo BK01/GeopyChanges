@@ -12,6 +12,7 @@ from geopy.exc import (
     ConfigurationError
 )
 from geopy.util import logger
+import Calculation
 
 
 __all__ = ("GeoNames", )
@@ -68,7 +69,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             "%s://api.geonames.org/findNearbyPlaceNameJSON" % self.scheme
         )
 
-    def geocode(self, query, exactly_one=True, timeout=None): # pylint: disable=W0221
+    def geocode(self, query,userlocation=None, exactly_one=True, timeout=None): # pylint: disable=W0221
         """
         Geocode a location query.
 
@@ -95,7 +96,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),
+            self._call_geocoder(url, timeout=timeout),userlocation,
             exactly_one,
         )
 
@@ -142,10 +143,11 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             exactly_one
         )
 
-    def _parse_json(self, doc, exactly_one):
+    def _parse_json(self, doc,userlocation, exactly_one):
         """
         Parse JSON response body.
         """
+	temparray=[]
         places = doc.get('geonames', [])
         err = doc.get('status', None)
         if err and 'message' in err:
@@ -177,8 +179,17 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             )
 
             return Location(location, (latitude, longitude), place)
+	if userlocation is None:
+		if exactly_one:
+            		return parse_code(places[0])
+        	else:
+			return [parse_code(place) for place in places]
+	else:
+		for place in places:
+			temparray.append(parse_code(place))
+		resultplace = Calculation.calculations(userlocation,temparray)
 
-        if exactly_one:
-            return parse_code(places[0])
-        else:
-            return [parse_code(place) for place in places]
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace

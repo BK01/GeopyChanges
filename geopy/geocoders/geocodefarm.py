@@ -9,6 +9,7 @@ from geopy.util import logger
 from geopy.exc import GeocoderAuthenticationFailure, GeocoderQuotaExceeded, \
     GeocoderServiceError
 from geopy.compat import urlencode
+import Calculation
 
 
 __all__ = ("GeocodeFarm", )
@@ -58,7 +59,7 @@ class GeocodeFarm(Geocoder):
             "%s://www.geocode.farm/v3/json/reverse/" % self.scheme
         )
 
-    def geocode(self, query, exactly_one=True, timeout=None):
+    def geocode(self, query, userlocation=None,exactly_one=True, timeout=None):
         """
         Geocode a location query.
 
@@ -80,7 +81,7 @@ class GeocodeFarm(Geocoder):
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
         )
 
     def reverse(self, query, exactly_one=True, timeout=None):
@@ -140,17 +141,25 @@ class GeocodeFarm(Geocoder):
             places.append(Location(placename, (latitude, longitude), result))
         return places
 
-    def _parse_json(self, api_result, exactly_one):
+    def _parse_json(self, api_result,userlocation, exactly_one):
         if api_result is None:
             return None
         geocoding_results = api_result["geocoding_results"]
         self._check_for_api_errors(geocoding_results)
 
         places = self.parse_code(geocoding_results)
-        if exactly_one is True:
-            return places[0]
-        else:
-            return places
+	if userlocation is None:
+		if exactly_one is True:
+		    return places[0]
+		else:
+		    return places
+	else:
+		resultplace = Calculation.calculations(userlocation,places)
+
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
 
     @staticmethod
     def _check_for_api_errors(geocoding_results):

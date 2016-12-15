@@ -8,6 +8,7 @@ from geopy.geocoders.base import Geocoder, DEFAULT_SCHEME, DEFAULT_TIMEOUT
 from geopy.exc import GeocoderQueryError
 from geopy.location import Location
 from geopy.util import logger
+import Calculation
 
 
 __all__ = ("DataBC", )
@@ -42,6 +43,7 @@ class DataBC(Geocoder):
     def geocode(
             self,
             query,
+	    userlocation = None,
             max_results=25,
             set_back=0,
             location_descriptor='any',
@@ -99,11 +101,17 @@ class DataBC(Geocoder):
         if not len(response['features']):
             return None
         geocoded = []
-        for feature in response['features']:
-            geocoded.append(self._parse_feature(feature))
-        if exactly_one is True:
-            return geocoded[0]
-        return geocoded
+	for feature in response['features']:
+		    geocoded.append(self._parse_feature(feature))
+	if userlocation is None:		
+		if exactly_one is True:
+		    return geocoded[0]
+		return geocoded
+	else:
+		resultplace = Calculation.calculations(userlocation,geocoded)
+		if exactly_one is True:
+		    return resultplace[0]
+		return resultplace
 
     @staticmethod
     def _parse_feature(feature):
@@ -115,3 +123,4 @@ class DataBC(Geocoder):
             properties['fullAddress'], (coordinates[1], coordinates[0]),
             properties
         )
+

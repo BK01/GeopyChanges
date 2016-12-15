@@ -10,7 +10,7 @@ from geopy.geocoders.base import (
 from geopy.compat import urlencode
 from geopy.location import Location
 from geopy.util import logger
-
+import Calculation
 
 __all__ = ("Mapzen", )
 
@@ -64,6 +64,7 @@ class Mapzen(Geocoder):
     def geocode(
             self,
             query,
+	    userlocation=None,
             exactly_one=True,
             timeout=None,
     ):  # pylint: disable=R0913,W0221
@@ -104,7 +105,7 @@ class Mapzen(Geocoder):
         url = "?".join((self.geocode_api, urlencode(params)))
         logger.debug("%s.geocode_api: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout), exactly_one
+            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
         )
 
     def reverse(
@@ -161,13 +162,24 @@ class Mapzen(Geocoder):
         placename = feature.get('properties', {}).get('name')
         return Location(placename, (latitude, longitude), feature)
 
-    def _parse_json(self, response, exactly_one):
+    def _parse_json(self, response,userlocation, exactly_one):
+	temparray=[]
         if response is None:
             return None
         features = response['features']
         if not len(features):
             return None
-        if exactly_one is True:
-            return self.parse_code(features[0])
-        else:
-            return [self.parse_code(feature) for feature in features]
+	if userlocation is None:
+		if exactly_one:
+            		return parse_code(features[0])
+        	else:
+			return [self.parse_code(feature) for feature in features]
+	else:
+		for feature in features:
+			temparray.append(self.parse_code(feature))
+		resultplace = Calculation.calculations(userlocation,temparray)
+
+		if exactly_one:
+		    	return resultplace[0]
+		else:
+		    	return resultplace
