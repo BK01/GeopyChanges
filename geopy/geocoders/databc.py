@@ -109,9 +109,8 @@ class DataBC(Geocoder):
     def _parse_feature(feature):
         properties = feature['properties']
         coordinates = feature['geometry']['coordinates']
-        #print properties['fullAddress']
         if properties['fullAddress'] == 'BC':
-            properties['fullAddress'] = 'None'
+            return None
         return Location(
             properties['fullAddress'], (coordinates[1], coordinates[0]),
             properties
