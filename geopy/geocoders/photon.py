@@ -206,7 +206,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
             return cls.parse_resource(resources['features'][0])
         else:
             return [cls.parse_resource(resource) for resource
-                    in resources['feature']]
+                    in resources['features']]
 
     @classmethod
     def parse_resource(cls, resource):
