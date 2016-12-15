@@ -246,6 +246,7 @@ class TestWebServices(unittest.TestCase):
 				self.assertIn(self.address,location.raw['display_name'])
 			elif gl == 10:
 				self.assertIn(self.address,location.raw['properties']['name'])
+	def testAddressMultiple(self):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
