@@ -18,6 +18,7 @@ class TestWebServices(unittest.TestCase):
 
 	def setUp(self):
 		self.address = "Sunnersta"
+		self.address2 = "Mackenzie"
 		self.addrNone = "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba"
 		self.scheme = "https"
 		self.plainscheme = "http"
@@ -224,12 +225,18 @@ class TestWebServices(unittest.TestCase):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
+			if gl == 4:
+				location = self.geolocators[gl].geocode(self.address2,exactly_one=False)	
+			else:
+				location = self.geolocators[gl].geocode(self.address,exactly_one=False)	
 			location = self.geolocators[gl].geocode(self.address)			
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
 				self.assertIn(self.address,location.raw['address']['formattedAddress'])
-			elif gl == 6:
+			elif gl == 4:
+				self.assertIn(self.address,location.raw['fullAddress'])
+			elif gl in (1,2,6):
 				self.assertIn(self.address,location.raw['name'])
 			elif gl == 7:
 				self.assertIn(self.address,location.raw['properties']['label'])
@@ -239,19 +246,23 @@ class TestWebServices(unittest.TestCase):
 				self.assertIn(self.address,location.raw['display_name'])
 			elif gl == 10:
 				self.assertIn(self.address,location.raw['properties']['name'])
-
-	def testAddressMultiple(self):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
-			location = self.geolocators[gl].geocode(self.address,exactly_one=False)	
+			if gl == 4:
+				location = self.geolocators[gl].geocode(self.address2,exactly_one=False)	
+			else:
+				location = self.geolocators[gl].geocode(self.address,exactly_one=False)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
 			elif gl == 3:
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['address']['formattedAddress'])
-			elif gl == 6:
+			elif gl == 4:
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['fullAddress'])
+			elif gl in (1,2,6):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['name'])
 			elif gl == 7:
