@@ -25,6 +25,8 @@ class GeopyTestCases(unittest.TestCase):
 		self.address = "Sunnersta" #static address to be found
 
 		self.address2 = "Mackenzie" #static address for DataBC only
+		
+		self.userlocation = (59.8585107,17.6368508)
 
 		self.addrNone = "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba" #non-existing address
 		self.scheme = "https"
@@ -239,8 +241,8 @@ class GeopyTestCases(unittest.TestCase):
 	            self.assertIs(type(location[l].altitude), float, "altitude is not of type float! " + str(gl))
 	            self.assertIs(type(location[l].raw), dict, "raw is not of type dict! " + str(gl))
 	            #print(location[l])
-		
-	def testAddressSingle(self):
+			
+		def testAddressSingle(self):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
@@ -298,7 +300,67 @@ class GeopyTestCases(unittest.TestCase):
 			elif gl == 10:
 				for gl1 in range(len(location)):
 					if self.address in location[gl1].raw['properties']['name']:
-						self.assertIn(self.address,location[gl1].raw['properties']['name'])					
+						self.assertIn(self.address,location[gl1].raw['properties']['name'])	
+			
+	def testAddressSingleChanges(self):
+		for gl in range(len(self.geolocators)):
+			#print self.geolocators[gl]
+			time.sleep(2)
+			if gl == 4:
+				location = self.geolocators[gl].geocode(self.address2,userlocation,exactly_one=True)	
+			else:
+				location = self.geolocators[gl].geocode(self.address,userlocation,exactly_one=True)			
+			if gl in (0,5):
+				self.assertIn(self.address,location.raw['formatted_address'])
+			elif gl == 3:
+				self.assertIn(self.address,location.raw['address']['formattedAddress'])
+			elif gl == 4:
+				self.assertIn(self.address2,location.raw['fullAddress'])
+			elif gl in (1,2,6):
+				self.assertIn(self.address,location.raw['name'])
+			elif gl == 7:
+				self.assertIn(self.address,location.raw['properties']['label'])
+			elif gl == 8:
+				self.assertIn(self.address,location.raw['formatted'])
+			elif gl == 9:
+				self.assertIn(self.address,location.raw['display_name'])
+			elif gl == 10:
+				self.assertIn(self.address,location.raw['properties']['name'])
+
+	def testAddressMultipleChanges(self):
+		for gl in range(len(self.geolocators)):
+			#print self.geolocators[gl]
+			time.sleep(2)
+			if gl == 4:
+				location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
+			else:
+				location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
+			if gl in (0,5):
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['formatted_address'])
+			elif gl == 3:
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['address']['formattedAddress'])
+			elif gl == 4:
+				for gl1 in range(len(location)):
+					if self.address2 in location[gl1].raw['fullAddress']:
+						self.assertIn(self.address2,location[gl1].raw['fullAddress'])
+			elif gl in (1,2,6):
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['name'])
+			elif gl == 7:
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['properties']['label'])
+			elif gl == 8:
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['formatted'])
+			elif gl == 9:
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location[gl1].raw['display_name'])
+			elif gl == 10:
+				for gl1 in range(len(location)):
+					if self.address in location[gl1].raw['properties']['name']:
+						self.assertIn(self.address,location[gl1].raw['properties']['name'])		
 						
 	def testDistanceType(self):
 		self.assertIsNot(type(vincenty(1)), Distance, "Distance does not have the right object type")
