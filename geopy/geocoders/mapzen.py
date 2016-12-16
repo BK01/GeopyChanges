@@ -171,7 +171,7 @@ class Mapzen(Geocoder):
             return None
 	if userlocation is None:
 		if exactly_one:
-            		return parse_code(features[0])
+            		return self.parse_code(features[0])
         	else:
 			return [self.parse_code(feature) for feature in features]
 	else:
