@@ -12,6 +12,7 @@ from geopy.exc import GeocoderServiceError, GeocoderAuthenticationFailure
 from geopy.exc import ConfigurationError
 from geopy.location import Location
 from geopy.util import logger
+import Calculation
 
 
 __all__ = ("ArcGIS", )
@@ -113,7 +114,7 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
         )
         return self._base_call_geocoder(request, timeout=timeout)
 
-    def geocode(self, query, exactly_one=True, timeout=None):
+    def geocode(self, query,userlocation=None, exactly_one=True, timeout=None):
         """
         Geocode a location query.
 
@@ -127,8 +128,8 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             exception. Set this only if you wish to override, on this call
             only, the value set during the geocoder's initialization.
         """
-        
-        if exactly_one is True:
+
+        if userlocation is None:
             params = {'text': query, 'maxLocations':1, 'f': 'json'}
             url = "?".join((self.api, urlencode(params)))
         else:
@@ -148,7 +149,8 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             raise GeocoderServiceError(str(response['error']))
 
         # Success; convert from the ArcGIS JSON format.
-        if exactly_one is True:
+	temparray=[]
+        if userlocation is None:
             if not len(response['locations']):
                 return None
             geocoded = []
@@ -159,6 +161,11 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
                         resource['name'], (geometry['y'], geometry['x']), resource
                     )
                 )
+
+    	    if exactly_one is True:
+    	       return geocoded[0]
+    	    return geocoded
+
         else:
             if not len(response['candidates']):
                 return None
@@ -170,10 +177,10 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
                         resource['address'], (geometry['y'], geometry['x']), resource
                     )
                 )
-
-        if exactly_one is True:
-            return geocoded[0]
-        return geocoded
+	    resultplace = Calculation.calculations(userlocation,geocoded)
+	    if exactly_one is True:
+    	       return resultplace[0]
+    	    return resultplace
 
     def reverse(self, query, exactly_one=True, timeout=None, # pylint: disable=R0913,W0221
                 distance=None, wkid=DEFAULT_WKID):
