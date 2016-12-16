@@ -68,7 +68,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
     def geocode(
             self,
             query,
-	    userlocation=None,
+	        userlocation=None,
             exactly_one=True,
             timeout=None,
             location_bias=None,

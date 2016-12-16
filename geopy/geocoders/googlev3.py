@@ -153,7 +153,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             self,
             query,
 	    userlocation= None,
-            exactly_one=False,
+            exactly_one=True,
             timeout=None,
             bounds=None,
             region=None,

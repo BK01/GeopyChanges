@@ -103,7 +103,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
     def reverse(
             self,
             query,
-            exactly_one=False,
+            exactly_one=True,
             timeout=None,
         ):
         """

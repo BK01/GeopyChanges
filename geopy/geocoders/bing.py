@@ -78,7 +78,7 @@ class Bing(Geocoder):
     def geocode(
             self,
             query,
-	    userlocation = None,
+			userlocation = None,
             exactly_one=True,
             user_location=None,
             timeout=None,
