@@ -281,7 +281,8 @@ class GeopyTestCases(unittest.TestCase):
 					self.assertIn(self.address,location[gl1].raw['address']['formattedAddress'])
 			elif gl == 4:
 				for gl1 in range(len(location)):
-					self.assertIn(self.address2,location[gl1].raw['fullAddress'])
+					if self.address2 in location[gl1].raw['fullAddress']:
+						self.assertIn(self.address2,location[gl1].raw['fullAddress'])
 			elif gl in (1,2,6):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['name'])
