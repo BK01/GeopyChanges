@@ -242,7 +242,7 @@ class GeopyTestCases(unittest.TestCase):
 				self.assertIs(type(location[l].raw), dict, "raw is not of type dict! " + str(gl))
 				#print(location[l])
 			
-		def testAddressSingle(self):
+	def testAddressSingle(self):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
@@ -389,9 +389,9 @@ class GeopyTestCases(unittest.TestCase):
 				location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
 			else:
 				location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
-			distance = []
 
 			#put all distance in array
+			distance = []
 			for l in range(len(location)):
 				distance.append(vincenty(self.userlocation,(location[l].latitude,location[l].longitude)))
 			
