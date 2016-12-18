@@ -198,11 +198,11 @@ class GeopyTestCases(unittest.TestCase):
 			time.sleep(2)
 			#without userlocation
 			location = self.geolocators[gl].geocode(self.addrNone)
-			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
 
 			#with userlocation
 			location = self.geolocators[gl].geocode(self.addrNone, self.userlocation)
-			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
 
 	def testDataTypeSingle(self):		
 		for gl in range(len(self.geolocators)):
@@ -321,7 +321,9 @@ class GeopyTestCases(unittest.TestCase):
 				self.assertIn(self.address,location.raw['address']['formattedAddress'])
 			elif gl == 4:
 				self.assertIn(self.address2,location.raw['fullAddress'])
-			elif gl in (1,2,6):
+			elif gl in (1,2):
+				self.assertIn(self.address,location.raw['address'])
+			elif gl in (6):
 				self.assertIn(self.address,location.raw['name'])
 			elif gl == 7:
 				self.assertIn(self.address,location.raw['properties']['label'])
@@ -350,7 +352,10 @@ class GeopyTestCases(unittest.TestCase):
 				for gl1 in range(len(location)):
 					if self.address2 in location[gl1].raw['fullAddress']:
 						self.assertIn(self.address2,location[gl1].raw['fullAddress'])
-			elif gl in (1,2,6):
+			elif gl in (1,2):
+				for gl1 in range(len(location)):
+					self.assertIn(self.address,location.raw['address'])
+			elif gl in (6):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['name'])
 			elif gl == 7:
