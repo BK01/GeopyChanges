@@ -78,13 +78,13 @@ class Bing(Geocoder):
     def geocode(
             self,
             query,
-			userlocation = None,
             exactly_one=True,
             user_location=None,
             timeout=None,
             culture=None,
             include_neighborhood=None,
-            include_country_code=False
+            include_country_code=False,
+	    userlocation=None,
         ):  # pylint: disable=W0221
         """
         Geocode an address.
@@ -191,7 +191,7 @@ class Bing(Geocoder):
         )
 
     @staticmethod
-    def _parse_json(doc,userlocation, exactly_one=True):  # pylint: disable=W0221
+    def _parse_json(doc, userlocation,exactly_one=True):  # pylint: disable=W0221
         """
         Parse a location name, latitude, and longitude from an JSON response.
         """
@@ -241,9 +241,9 @@ class Bing(Geocoder):
             return Location(location, (latitude, longitude), resource)
 	if userlocation is None:
 		if exactly_one:
-		    return parse_resource(resources[0])
+	    		return parse_resource(resources[0])
 		else:
-		    return [parse_resource(resource) for resource in resources]
+	    		return [parse_resource(resource) for resource in resources]
 	else:
 		for resource in resources:
 			temparray.append(parse_resource(resource))
@@ -253,9 +253,3 @@ class Bing(Geocoder):
 		    	return resultplace[0]
 		else:
 		    	return resultplace
-
-
-
-
-
-
