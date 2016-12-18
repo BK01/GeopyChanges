@@ -307,9 +307,9 @@ class GeopyTestCases(unittest.TestCase):
 			#print self.geolocators[gl]
 			time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=True)	
+				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=True)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=True)			
+				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=True)			
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
@@ -332,9 +332,9 @@ class GeopyTestCases(unittest.TestCase):
 			#print self.geolocators[gl]
 			time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
@@ -386,9 +386,9 @@ class GeopyTestCases(unittest.TestCase):
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)	
 
 			#put all distance in array
 			distance = []
