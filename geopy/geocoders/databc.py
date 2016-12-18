@@ -43,12 +43,12 @@ class DataBC(Geocoder):
     def geocode(
             self,
             query,
-	        userlocation = None,
             max_results=25,
             set_back=0,
             location_descriptor='any',
             exactly_one=True,
             timeout=5,
+			userlocation = None
         ):
         """
         Geocode a location query.

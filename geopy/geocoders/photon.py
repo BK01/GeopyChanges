@@ -68,13 +68,13 @@ class Photon(Geocoder):  # pylint: disable=W0223
     def geocode(
             self,
             query,
-	        userlocation=None,
-            exactly_one=True,
+	        exactly_one=True,
             timeout=None,
             location_bias=None,
             language=False,
             limit=None,
-            osm_tag=None
+            osm_tag=None,
+			userlocation=None
         ):  # pylint: disable=W0221
         """
         Geocode a location query.

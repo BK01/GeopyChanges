@@ -88,13 +88,13 @@ class Nominatim(Geocoder):
 
     def geocode(
             self,
-	    query,
-	    userlocation=None,
+			query,
             exactly_one=True,
             timeout=None,
             addressdetails=False,
             language=False,
-            geometry=None
+            geometry=None,
+			userlocation=None
     ):  # pylint: disable=R0913,W0221
         """
         Geocode a location query.

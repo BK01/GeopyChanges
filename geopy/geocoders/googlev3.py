@@ -151,15 +151,15 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
 
     def geocode(
             self,
-            query,
-	    userlocation= None,
+            query,	    
             exactly_one=True,
             timeout=None,
             bounds=None,
             region=None,
             components=None,
             language=None,
-            sensor=False,	    
+            sensor=False,	 
+			userlocation= None
         ):  # pylint: disable=W0221,R0913
         """
         Geocode a location query.

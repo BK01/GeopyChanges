@@ -64,13 +64,13 @@ class OpenCage(Geocoder):
 
     def geocode(
             self,
-            query,
-	    userlocation=None,
+            query,	    
             bounds=None,
             country=None,
             language=None,
             exactly_one=True,
             timeout=None,
+			userlocation=None
     ):  # pylint: disable=W0221,R0913
         """
         Geocode a location query.

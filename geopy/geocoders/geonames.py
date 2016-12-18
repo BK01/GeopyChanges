@@ -69,7 +69,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             "%s://api.geonames.org/findNearbyPlaceNameJSON" % self.scheme
         )
 
-    def geocode(self, query,userlocation=None, exactly_one=True, timeout=None): # pylint: disable=W0221
+    def geocode(self, query, exactly_one=True, timeout=None,userlocation=None): # pylint: disable=W0221
         """
         Geocode a location query.
 
