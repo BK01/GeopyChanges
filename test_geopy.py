@@ -196,9 +196,14 @@ class GeopyTestCases(unittest.TestCase):
 	def testDataTypeNone(self):
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
+			#without userlocation
 			location = self.geolocators[gl].geocode(self.addrNone)
-			self.assertIsNone(location, "location found! " + str(gl) + " " + str(self.geolocators[gl]))
-			
+			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+
+			#with userlocation
+			location = self.geolocators[gl].geocode(self.addrNone, self.userlocation)
+			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+
 	def testDataTypeSingle(self):		
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
