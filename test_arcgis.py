@@ -53,8 +53,14 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 
+			#without userlocation
 			location = self.geolocators[gl].geocode(self.addrNone)
 			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+
+			#with userlocation
+			location = self.geolocators[gl].geocode(self.addrNone, self.userlocation)
+			self.assertIsNone(location, "location found! " + web_serv + " " + str(self.geolocators[gl]))
+
 			
 	def testDataTypeSingle(self):		
 		for gl in range(len(self.geolocators)):
@@ -77,6 +83,7 @@ class ArcGISTestCases(unittest.TestCase):
 			self.assertIs(type(location.raw), dict, "raw is not of type dict! " + web_serv)
 			
 	def testDataTypeMultiple(self):
+		#before changes, the web service always return 1 address. Making the request without userlocation will result in single result
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
 
@@ -85,7 +92,7 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 
-			location = self.geolocators[gl].geocode(self.address, False)
+			location = self.geolocators[gl].geocode(self.address,self.userlocation, False)
 				
 			self.assertIsNotNone(location, "location not found! " + web_serv)
 			self.assertIs(type(location), list, "location is single! " + web_serv)
@@ -98,7 +105,8 @@ class ArcGISTestCases(unittest.TestCase):
 				self.assertIs(type(location[l].altitude), float, "altitude is not of type float! " + web_serv)
 				self.assertIs(type(location[l].raw), dict, "raw is not of type dict! " + web_serv)
 			
-	def testAddressSingle(self):
+	def testAddressBeforeChanges(self):
+		#before changes, the web service always return 1 address. Making the testAddressMultiple invalid
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
 			
@@ -107,22 +115,15 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 			
+			#request for single
 			location = self.geolocators[gl].geocode(self.address)			
 			self.assertIn(self.address,location.raw['name'], "address is not the same for " + web_serv + "," + self.address + " != " + location.raw['name'])
 			
-	def testAddressMultiple(self):
-		for gl in range(len(self.geolocators)):
-			time.sleep(2)
-
-			#flag for differentiate between authenticated and unauthenticated request
-			web_serv = 'not_auth'
-			if gl == 0:
-				web_serv = 'auth'
-
-			location = self.geolocators[gl].geocode(self.address,exactly_one=False)	
+			#request for multiple
+			location = self.geolocators[gl].geocode(self.address, exactly_one=False)			
 			for gl1 in range(len(location)):
-				self.assertIn(self.address,location[gl1].raw['name'], "address not found " + web_serv)
-			
+				self.assertIn(self.address,location[gl1].raw['name'], "address is not the same for " + web_serv + "," + self.address + " != " + location[gl1].raw['name'])
+
 	def testAddressSingleChanges(self):
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
@@ -133,7 +134,7 @@ class ArcGISTestCases(unittest.TestCase):
 				web_serv = 'auth'
 
 			location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=True)			
-			self.assertIn(self.address,location.raw['name'], "address not found " + web_serv)
+			self.assertIn(self.address,location.raw['address'], "address not found " + web_serv)
 			
 	def testAddressMultipleChanges(self):
 		for gl in range(len(self.geolocators)):
