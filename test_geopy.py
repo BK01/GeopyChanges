@@ -323,7 +323,7 @@ class GeopyTestCases(unittest.TestCase):
 				self.assertIn(self.address2,location.raw['fullAddress'])
 			elif gl in (1,2):
 				self.assertIn(self.address,location.raw['address'])
-			elif gl in (6):
+			elif gl == 6:
 				self.assertIn(self.address,location.raw['name'])
 			elif gl == 7:
 				self.assertIn(self.address,location.raw['properties']['label'])
@@ -354,8 +354,8 @@ class GeopyTestCases(unittest.TestCase):
 						self.assertIn(self.address2,location[gl1].raw['fullAddress'])
 			elif gl in (1,2):
 				for gl1 in range(len(location)):
-					self.assertIn(self.address,location.raw['address'])
-			elif gl in (6):
+					self.assertIn(self.address,location[gl1].raw['address'])
+			elif gl == 6:
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['name'])
 			elif gl == 7:

@@ -202,29 +202,24 @@ class Photon(Geocoder):  # pylint: disable=W0223
         """
         Parse display name, latitude, and longitude from a JSON response.
         """
-	temparray=[]
+        temparray=[]
         if not len(resources):  # pragma: no cover
             return None
-	if userlocation is None:
-		if exactly_one:
-            		return cls.parse_resource(resources['features'][0])
-        	else:
-			return [parse_place(place) for place in places]
-	else:
-		for resource in resources['features']:
-			temparray.append(cls.parse_resource(resource))
-		resultplace = Calculation.calculations(userlocation,temparray)
-
-		if exactly_one:
-		    	return resultplace[0]
-		else:
-		    	return resultplace
-
-        if exactly_one:
-            return cls.parse_resource(resources['features'][0])
-        else:
-            return [cls.parse_resource(resource) for resource
+        if userlocation is None:
+            if exactly_one:
+                return cls.parse_resource(resources['features'][0])
+            else:
+                return [cls.parse_resource(resource) for resource
                     in resources['features']]
+        else:
+            for resource in resources['features']:
+                temparray.append(cls.parse_resource(resource))
+                resultplace = Calculation.calculations(userlocation,temparray)
+
+            if exactly_one:
+		    	return resultplace[0]
+            else:
+		    	return resultplace
 
     @classmethod
     def parse_resource(cls, resource):
