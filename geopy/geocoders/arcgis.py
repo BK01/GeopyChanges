@@ -128,13 +128,15 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             exception. Set this only if you wish to override, on this call
             only, the value set during the geocoder's initialization.
         """
-
+        #using different url, depend on activating searching based on user location or not
         if userlocation is None:
             params = {'text': query, 'maxLocations':1, 'f': 'json'}
             url = "?".join((self.api, urlencode(params)))
+            print url
         else:
             params = {'SingleLine': query, 'f': 'json'}
             url = "?".join((self.api_multi, urlencode(params)))
+            print url
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         response = self._call_geocoder(url, timeout=timeout)
 
