@@ -166,7 +166,7 @@ class OpenCage(Geocoder):
 
     def _parse_json(self, page,userlocation, exactly_one=True):
         '''Returns location, (latitude, longitude) from json feed.'''
-		self.temparray=[]
+	self.temparray=[]
         places = page.get('results', [])
         if not len(places):
             self._check_status(page.get('status'))
@@ -178,20 +178,20 @@ class OpenCage(Geocoder):
             latitude = place['geometry']['lat']
             longitude = place['geometry']['lng']
             return Location(location, (latitude, longitude), place)
-		if userlocation is None:
-			if exactly_one:
-				return parse_place(places[0])
-			else:
-				return [parse_place(place) for place in places]
+	if userlocation is None:
+		if exactly_one:
+			return parse_place(places[0])
 		else:
-			for place in places:
-				self.temparray.append(parse_place(place))
-			resultplace = Calculation.calculations(userlocation,self.temparray)
+			return [parse_place(place) for place in places]
+	else:
+		for place in places:
+			self.temparray.append(parse_place(place))
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
-			if exactly_one:
-					return resultplace[0]
-			else:
-					return resultplace
+		if exactly_one:
+				return resultplace[0]
+		else:
+				return resultplace
         '''if exactly_one:
             return parse_place(places[0])
         else:
