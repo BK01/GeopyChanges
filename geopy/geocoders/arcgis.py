@@ -31,7 +31,7 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
     def __init__(self, username=None, password=None, referer=None, # pylint: disable=R0913
                  token_lifetime=60, scheme=DEFAULT_SCHEME,
                  timeout=DEFAULT_TIMEOUT, proxies=None,
-                user_agent=None,geocoded=[]):
+                user_agent=None,temparray=[]):
         """
         Create a ArcGIS-based geocoder.
 
@@ -149,35 +149,35 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             raise GeocoderServiceError(str(response['error']))
 
         # Success; convert from the ArcGIS JSON format.
-	temparray=[]
+	self.temparray=[]
         if userlocation is None:
             if not len(response['locations']):
                 return None
-            self.geocoded = []
+            self.temparray = []
             for resource in response['locations']:
                 geometry = resource['feature']['geometry']
-                self.geocoded.append(
+                self.temparray.append(
                     Location(
                         resource['name'], (geometry['y'], geometry['x']), resource
                     )
                 )
 
     	    if exactly_one is True:
-    	       return self.geocoded[0]
-    	    return self.geocoded
+    	       return self.temparray[0]
+    	    return self.temparray
 
         else:
             if not len(response['candidates']):
                 return None
-            self.geocoded = []
+            self.temparray = []
             for resource in response['candidates']:
                 geometry = resource['location']
-                self.geocoded.append(
+                self.temparray.append(
                     Location(
                         resource['address'], (geometry['y'], geometry['x']), resource
                     )
                 )
-	    resultplace = Calculation.calculations(userlocation,self.geocoded)
+	    resultplace = Calculation.calculations(userlocation,self.temparray)
 	    if exactly_one is True:
     	       return resultplace[0]
     	    return resultplace

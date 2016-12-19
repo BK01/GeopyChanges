@@ -29,7 +29,8 @@ class Mapzen(Geocoder):
             country_bias=None,
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
-            user_agent=None
+            user_agent=None,
+			temparray=[]
     ):  # pylint: disable=R0913
         """
         :param string format_string: String containing '%s' where the
@@ -163,7 +164,7 @@ class Mapzen(Geocoder):
         return Location(placename, (latitude, longitude), feature)
 
     def _parse_json(self, response,userlocation, exactly_one):
-	temparray=[]
+	self.temparray=[]
         if response is None:
             return None
         features = response['features']
@@ -176,8 +177,8 @@ class Mapzen(Geocoder):
 			return [self.parse_code(feature) for feature in features]
 	else:
 		for feature in features:
-			temparray.append(self.parse_code(feature))
-		resultplace = Calculation.calculations(userlocation,temparray)
+			self.temparray.append(self.parse_code(feature))
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
 		if exactly_one:
 		    	return resultplace[0]

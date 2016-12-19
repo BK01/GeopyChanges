@@ -44,7 +44,8 @@ class Nominatim(Geocoder):
             proxies=None,
             domain='nominatim.openstreetmap.org',
             scheme=DEFAULT_SCHEME,
-            user_agent=None
+            user_agent=None,
+			temparray=[]
     ):  # pylint: disable=R0913
         """
         :param string format_string: String containing '%s' where the

@@ -34,6 +34,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
+			temparray=[]
         ):
         """
         :param string country_bias:
@@ -147,7 +148,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
         """
         Parse JSON response body.
         """
-	temparray=[]
+	self.temparray=[]
         places = doc.get('geonames', [])
         err = doc.get('status', None)
         if err and 'message' in err:
@@ -186,8 +187,8 @@ class GeoNames(Geocoder): # pylint: disable=W0223
 			return [parse_code(place) for place in places]
 	else:
 		for place in places:
-			temparray.append(parse_code(place))
-		resultplace = Calculation.calculations(userlocation,temparray)
+			self.temparray.append(parse_code(place))
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
 		if exactly_one:
 		    	return resultplace[0]

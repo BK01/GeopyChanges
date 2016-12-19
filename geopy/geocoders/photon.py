@@ -30,7 +30,8 @@ class Photon(Geocoder):  # pylint: disable=W0223
             scheme=DEFAULT_SCHEME,
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
-            domain='photon.komoot.de'
+            domain='photon.komoot.de',
+			temparray=[]
     ):   # pylint: disable=R0913
         """
         Initialize a Photon/Komoot geocoder which aims to let you "search as
@@ -202,7 +203,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
         """
         Parse display name, latitude, and longitude from a JSON response.
         """
-        temparray=[]
+        self.temparray=[]
         if not len(resources):  # pragma: no cover
             return None
         if userlocation is None:
@@ -213,8 +214,8 @@ class Photon(Geocoder):  # pylint: disable=W0223
                     in resources['features']]
         else:
             for resource in resources['features']:
-                temparray.append(cls.parse_resource(resource))
-                resultplace = Calculation.calculations(userlocation,temparray)
+                self.temparray.append(cls.parse_resource(resource))
+                resultplace = Calculation.calculations(userlocation,self.temparray)
 
             if exactly_one:
 		    	return resultplace[0]

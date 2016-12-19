@@ -48,6 +48,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             proxies=None,
             user_agent=None,
             channel='',
+			temparray=[]
         ):  # pylint: disable=R0913
         """
         Initialize a customized Google geocoder.
@@ -336,7 +337,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
 
     def _parse_json(self, page,userlocation, exactly_one=False):
         '''Returns location, (latitude, longitude) from json feed.'''
-	temparray = []
+	self.temparray = []
         places = page.get('results', [])
         if not len(places):
             self._check_status(page.get('status'))
@@ -356,8 +357,8 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
 			return [parse_place(place) for place in places]
 	else:
 		for place in places:
-			temparray.append(parse_place(place))
-		resultplace = Calculation.calculations(userlocation,temparray)
+			self.temparray.append(parse_place(place))
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
 		if exactly_one:
 		    	return resultplace[0]

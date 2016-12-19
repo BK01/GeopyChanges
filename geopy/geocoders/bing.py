@@ -41,6 +41,7 @@ class Bing(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
+			temparray=[]
         ):  # pylint: disable=R0913
         """Initialize a customized Bing geocoder with location-specific
         address information and your Bing Maps API key.
@@ -195,7 +196,7 @@ class Bing(Geocoder):
         """
         Parse a location name, latitude, and longitude from an JSON response.
         """
-	temparray = []
+	self.temparray = []
         status_code = doc.get("statusCode", 200)
         if status_code != 200:
             err = doc.get("errorDetails", "")
@@ -246,8 +247,8 @@ class Bing(Geocoder):
 	    		return [parse_resource(resource) for resource in resources]
 	else:
 		for resource in resources:
-			temparray.append(parse_resource(resource))
-		resultplace = Calculation.calculations(userlocation,temparray)
+			self.temparray.append(parse_resource(resource))
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
 		if exactly_one:
 		    	return resultplace[0]

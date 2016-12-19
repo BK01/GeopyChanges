@@ -20,7 +20,7 @@ class DataBC(Geocoder):
         http://www.data.gov.bc.ca/dbc/geographic/locate/geocoding.page
     """
 
-    def __init__(self, scheme=DEFAULT_SCHEME, timeout=DEFAULT_TIMEOUT, proxies=None, user_agent=None):
+    def __init__(self, scheme=DEFAULT_SCHEME, timeout=DEFAULT_TIMEOUT, proxies=None, user_agent=None,temparray=[]):
         """
         Create a DataBC-based geocoder.
 
@@ -100,15 +100,15 @@ class DataBC(Geocoder):
         # Success; convert from GeoJSON
         if not len(response['features']):
             return None
-        geocoded = []
+        self.temparray = []
 	for feature in response['features']:
-		    geocoded.append(self._parse_feature(feature))
+		    self.temparray.append(self._parse_feature(feature))
 	if userlocation is None:		
 		if exactly_one is True:
-		    return geocoded[0]
-		return geocoded
+		    return self.temparray[0]
+		return self.temparray
 	else:
-		resultplace = Calculation.calculations(userlocation,geocoded)
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 		if exactly_one is True:
 		    return resultplace[0]
 		return resultplace
