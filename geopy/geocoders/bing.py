@@ -41,7 +41,7 @@ class Bing(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-			temparray=[]
+	    temparray=[],
         ):  # pylint: disable=R0913
         """Initialize a customized Bing geocoder with location-specific
         address information and your Bing Maps API key.
@@ -72,7 +72,7 @@ class Bing(Geocoder):
 
             .. versionadded:: 0.96
         """
-        super(Bing, self).__init__(format_string, scheme, timeout, proxies, user_agent=user_agent)
+        super(Bing, self).__init__(format_string, scheme,timeout, proxies, user_agent=user_agent)
         self.api_key = api_key
         self.api = "%s://dev.virtualearth.net/REST/v1/Locations" % self.scheme
 
@@ -158,7 +158,7 @@ class Bing(Geocoder):
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),userlocation,
+            self,self._call_geocoder(url, timeout=timeout),userlocation,
             exactly_one
         )
 
@@ -192,7 +192,7 @@ class Bing(Geocoder):
         )
 
     @staticmethod
-    def _parse_json(doc, userlocation,exactly_one=True):  # pylint: disable=W0221
+    def _parse_json(self,doc, userlocation,exactly_one=True):  # pylint: disable=W0221
         """
         Parse a location name, latitude, and longitude from an JSON response.
         """
