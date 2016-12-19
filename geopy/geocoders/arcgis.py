@@ -31,7 +31,7 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
     def __init__(self, username=None, password=None, referer=None, # pylint: disable=R0913
                  token_lifetime=60, scheme=DEFAULT_SCHEME,
                  timeout=DEFAULT_TIMEOUT, proxies=None,
-                user_agent=None):
+                user_agent=None,geocoded=[]):
         """
         Create a ArcGIS-based geocoder.
 
@@ -153,31 +153,31 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
         if userlocation is None:
             if not len(response['locations']):
                 return None
-            geocoded = []
+            self.geocoded = []
             for resource in response['locations']:
                 geometry = resource['feature']['geometry']
-                geocoded.append(
+                self.geocoded.append(
                     Location(
                         resource['name'], (geometry['y'], geometry['x']), resource
                     )
                 )
 
     	    if exactly_one is True:
-    	       return geocoded[0]
-    	    return geocoded
+    	       return self.geocoded[0]
+    	    return self.geocoded
 
         else:
             if not len(response['candidates']):
                 return None
-            geocoded = []
+            self.geocoded = []
             for resource in response['candidates']:
                 geometry = resource['location']
-                geocoded.append(
+                self.geocoded.append(
                     Location(
                         resource['address'], (geometry['y'], geometry['x']), resource
                     )
                 )
-	    resultplace = Calculation.calculations(userlocation,geocoded)
+	    resultplace = Calculation.calculations(userlocation,self.geocoded)
 	    if exactly_one is True:
     	       return resultplace[0]
     	    return resultplace
