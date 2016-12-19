@@ -1,0 +1,476 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage report</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.debounce.min.js"></script>
+    <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="coverage_html.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(coverage.index_ready);
+    </script>
+</head>
+<body class="indexfile">
+
+<div id="header">
+    <div class="content">
+        <h1>Coverage report:
+            <span class="pc_cov">55%</span>
+        </h1>
+
+        <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
+
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
+    </div>
+</div>
+
+<div class="help_panel">
+    <img id="panel_icon" src="keybd_open.png" alt="Hide keyboard shortcuts" />
+    <p class="legend">Hot-keys on this page</p>
+    <div>
+    <p class="keyhelp">
+        <span class="key">n</span>
+        <span class="key">s</span>
+        <span class="key">m</span>
+        <span class="key">x</span>
+        
+        <span class="key">b</span>
+        <span class="key">p</span>
+        
+        <span class="key">c</span> &nbsp; change column sorting
+    </p>
+    </div>
+</div>
+
+<div id="index">
+    <table class="index">
+        <thead>
+            
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left headerSortDown shortkey_n">Module</th>
+                <th class="shortkey_s">statements</th>
+                <th class="shortkey_m">missing</th>
+                <th class="shortkey_x">excluded</th>
+                
+                <th class="shortkey_b">branches</th>
+                <th class="shortkey_p">partial</th>
+                
+                <th class="right shortkey_c">coverage</th>
+            </tr>
+        </thead>
+        
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>2248</td>
+                <td>925</td>
+                <td>74</td>
+                
+                <td>818</td>
+                <td>96</td>
+                
+                <td class="right" data-ratio="1684 3066">55%</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy___init___py.html">geopy\__init__.py</a></td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="4 4">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_compat_py.html">geopy\compat.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>43</td>
+                
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="2 2">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_distance_py.html">geopy\distance.py</a></td>
+                <td>189</td>
+                <td>80</td>
+                <td>4</td>
+                
+                <td>36</td>
+                <td>6</td>
+                
+                <td class="right" data-ratio="127 225">56%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_exc_py.html">geopy\exc.py</a></td>
+                <td>11</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="11 11">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_format_py.html">geopy\format.py</a></td>
+                <td>45</td>
+                <td>8</td>
+                <td>0</td>
+                
+                <td>13</td>
+                <td>7</td>
+                
+                <td class="right" data-ratio="43 58">74%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_Calculation_py.html">geopy\geocoders\Calculation.py</a></td>
+                <td>10</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td>4</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="14 14">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders___init___py.html">geopy\geocoders\__init__.py</a></td>
+                <td>26</td>
+                <td>4</td>
+                <td>0</td>
+                
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="22 26">85%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_arcgis_py.html">geopy\geocoders\arcgis.py</a></td>
+                <td>107</td>
+                <td>30</td>
+                <td>0</td>
+                
+                <td>42</td>
+                <td>6</td>
+                
+                <td class="right" data-ratio="101 149">68%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_baidu_py.html">geopy\geocoders\baidu.py</a></td>
+                <td>66</td>
+                <td>52</td>
+                <td>0</td>
+                
+                <td>26</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="14 92">15%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_base_py.html">geopy\geocoders\base.py</a></td>
+                <td>79</td>
+                <td>39</td>
+                <td>7</td>
+                
+                <td>34</td>
+                <td>6</td>
+                
+                <td class="right" data-ratio="46 113">41%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_bing_py.html">geopy\geocoders\bing.py</a></td>
+                <td>80</td>
+                <td>21</td>
+                <td>2</td>
+                
+                <td>34</td>
+                <td>7</td>
+                
+                <td class="right" data-ratio="76 114">67%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_databc_py.html">geopy\geocoders\databc.py</a></td>
+                <td>43</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td>18</td>
+                <td>3</td>
+                
+                <td class="right" data-ratio="55 61">90%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_dot_us_py.html">geopy\geocoders\dot_us.py</a></td>
+                <td>54</td>
+                <td>42</td>
+                <td>0</td>
+                
+                <td>18</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="12 72">17%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_geocodefarm_py.html">geopy\geocoders\geocodefarm.py</a></td>
+                <td>68</td>
+                <td>13</td>
+                <td>0</td>
+                
+                <td>20</td>
+                <td>4</td>
+                
+                <td class="right" data-ratio="69 88">78%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_geonames_py.html">geopy\geocoders\geonames.py</a></td>
+                <td>66</td>
+                <td>15</td>
+                <td>0</td>
+                
+                <td>22</td>
+                <td>5</td>
+                
+                <td class="right" data-ratio="66 88">75%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_googlev3_py.html">geopy\geocoders\googlev3.py</a></td>
+                <td>132</td>
+                <td>61</td>
+                <td>0</td>
+                
+                <td>58</td>
+                <td>9</td>
+                
+                <td class="right" data-ratio="90 190">47%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_ignfrance_py.html">geopy\geocoders\ignfrance.py</a></td>
+                <td>149</td>
+                <td>130</td>
+                <td>0</td>
+                
+                <td>48</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="19 197">10%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_mapzen_py.html">geopy\geocoders\mapzen.py</a></td>
+                <td>59</td>
+                <td>15</td>
+                <td>0</td>
+                
+                <td>16</td>
+                <td>4</td>
+                
+                <td class="right" data-ratio="56 75">75%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_opencage_py.html">geopy\geocoders\opencage.py</a></td>
+                <td>63</td>
+                <td>20</td>
+                <td>0</td>
+                
+                <td>24</td>
+                <td>4</td>
+                
+                <td class="right" data-ratio="55 87">63%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_openmapquest_py.html">geopy\geocoders\openmapquest.py</a></td>
+                <td>30</td>
+                <td>19</td>
+                <td>2</td>
+                
+                <td>6</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="11 36">31%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_osm_py.html">geopy\geocoders\osm.py</a></td>
+                <td>81</td>
+                <td>28</td>
+                <td>0</td>
+                
+                <td>40</td>
+                <td>10</td>
+                
+                <td class="right" data-ratio="71 121">59%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_photon_py.html">geopy\geocoders\photon.py</a></td>
+                <td>79</td>
+                <td>32</td>
+                <td>2</td>
+                
+                <td>32</td>
+                <td>5</td>
+                
+                <td class="right" data-ratio="62 111">56%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_placefinder_py.html">geopy\geocoders\placefinder.py</a></td>
+                <td>59</td>
+                <td>42</td>
+                <td>0</td>
+                
+                <td>20</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="17 79">22%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_smartystreets_py.html">geopy\geocoders\smartystreets.py</a></td>
+                <td>39</td>
+                <td>26</td>
+                <td>0</td>
+                
+                <td>12</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="13 51">25%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_what3words_py.html">geopy\geocoders\what3words.py</a></td>
+                <td>73</td>
+                <td>57</td>
+                <td>0</td>
+                
+                <td>20</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="16 93">17%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_geocoders_yandex_py.html">geopy\geocoders\yandex.py</a></td>
+                <td>57</td>
+                <td>46</td>
+                <td>0</td>
+                
+                <td>14</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="11 71">15%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_location_py.html">geopy\location.py</a></td>
+                <td>44</td>
+                <td>13</td>
+                <td>2</td>
+                
+                <td>10</td>
+                <td>4</td>
+                
+                <td class="right" data-ratio="35 54">65%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_point_py.html">geopy\point.py</a></td>
+                <td>118</td>
+                <td>65</td>
+                <td>6</td>
+                
+                <td>49</td>
+                <td>2</td>
+                
+                <td class="right" data-ratio="61 167">37%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_units_py.html">geopy\units.py</a></td>
+                <td>78</td>
+                <td>51</td>
+                <td>0</td>
+                
+                <td>42</td>
+                <td>5</td>
+                
+                <td class="right" data-ratio="32 120">27%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="geopy_util_py.html">geopy\util.py</a></td>
+                <td>35</td>
+                <td>13</td>
+                <td>6</td>
+                
+                <td>10</td>
+                <td>3</td>
+                
+                <td class="right" data-ratio="27 45">60%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="test_geopy_py.html">test_geopy.py</a></td>
+                <td>302</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td>150</td>
+                <td>6</td>
+                
+                <td class="right" data-ratio="446 452">99%</td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</div>
+
+<div id="footer">
+    <div class="content">
+        <p>
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.2</a>,
+            created at 2016-12-19 00:51
+        </p>
+    </div>
+</div>
+
+</body>
+</html>
