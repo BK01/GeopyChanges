@@ -31,7 +31,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             domain='photon.komoot.de',
-			temparray=[]
+	    temparray=[],
     ):   # pylint: disable=R0913
         """
         Initialize a Photon/Komoot geocoder which aims to let you "search as
@@ -69,7 +69,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
     def geocode(
             self,
             query,
-	        exactly_one=True,
+	    exactly_one=True,
             timeout=None,
             location_bias=None,
             language=False,
@@ -136,7 +136,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
         url = "?".join((self.api, urlencode(params, doseq=True)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),userlocation,
+            self,self._call_geocoder(url, timeout=timeout),userlocation,
             exactly_one
         )
 
@@ -199,7 +199,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
         )
 
     @classmethod
-    def _parse_json(cls, resources,userlocation,exactly_one=True):
+    def _parse_json(self,cls, resources,userlocation,exactly_one=True):
         """
         Parse display name, latitude, and longitude from a JSON response.
         """
