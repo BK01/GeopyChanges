@@ -133,7 +133,7 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 
-			location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=True)			
+			location = self.geolocators[gl].geocode(self.address,exactly_one=True,userlocation=self.userlocation)			
 			self.assertIn(self.address,location.raw['address'], "address not found " + web_serv)
 			
 	def testAddressMultipleChanges(self):
@@ -145,7 +145,7 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 
-			location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
+			location = self.geolocators[gl].geocode(self.address,exactly_one=False,userlocation=self.userlocation)	
 			for gl1 in range(len(location)):
 				self.assertIn(self.address,location[gl1].raw['address'], "address not found " + web_serv)
 						
@@ -158,7 +158,7 @@ class ArcGISTestCases(unittest.TestCase):
 			if gl == 0:
 				web_serv = 'auth'
 
-			location = self.geolocators[gl].geocode(self.address,self.userlocation,exactly_one=False)	
+			location = self.geolocators[gl].geocode(self.address,exactly_one=False,userlocation=self.userlocation)	
 
 			#put all distance in array
 			distance = []
@@ -169,6 +169,15 @@ class ArcGISTestCases(unittest.TestCase):
 			min_distance = distance[0]
 			for l in range(len(distance)):
 				self.assertLessEqual(min_distance, distance[l], "The order of data is wrong " + web_serv)
+
+	def testLenData(self):
+		for gl in range(len(self.geolocators)):
+			time.sleep(2)
+			location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)	
+			print len(location)
+			print len(self.geolocators[gl].geocoded)
+			self.assertEqual(len(self.geolocators[gl].geocoded), len(location), "The length is not the same")
+
 
 if __name__ == '__main__':
 	unittest.main()
