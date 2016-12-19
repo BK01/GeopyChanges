@@ -28,7 +28,7 @@ class GeocodeFarm(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-			temparray=[]
+	    temparray=[]
         ):  # pylint: disable=R0913
         """
         Create a geocoder for GeocodeFarm.
@@ -127,7 +127,8 @@ class GeocodeFarm(Geocoder):
         """
         Parse each resource.
         """
-        self.temparray = []
+
+	places=[]
         for result in results.get('RESULTS'):
             coordinates = result.get('COORDINATES', {})
             #address = result.get('ADDRESS', {})
@@ -142,7 +143,8 @@ class GeocodeFarm(Geocoder):
             places.append(Location(placename, (latitude, longitude), result))
         return places
 
-    def _parse_json(self, api_result,userlocation, exactly_one):
+    def _parse_json(self,api_result,userlocation, exactly_one):
+	self.temparray = []
         if api_result is None:
             return None
         geocoding_results = api_result["geocoding_results"]
@@ -155,7 +157,7 @@ class GeocodeFarm(Geocoder):
 		else:
 		    return self.temparray
 	else:
-		resultplace = Calculation.calculations(userlocation,self.places)
+		resultplace = Calculation.calculations(userlocation,self.temparray)
 
 		if exactly_one:
 		    	return resultplace[0]
