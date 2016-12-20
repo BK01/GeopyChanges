@@ -6,7 +6,7 @@ from geopy.geocoders import GeocodeFarm
 from geopy.geocoders import GeoNames
 from geopy.geocoders import Mapzen
 from geopy.geocoders import OpenCage
-from geopy.geocoders import OpenMapQuest
+#from geopy.geocoders import OpenMapQuest
 from geopy.geocoders import Nominatim
 from geopy.geocoders import Photon
 from geopy.location import Location
@@ -405,10 +405,10 @@ class GeopyTestCases(unittest.TestCase):
 			for l in range(len(location)):
 				distance.append(vincenty(self.userlocation,(location[l].latitude,location[l].longitude)))
 			
-			#compare all distance with the first distance, the first one should be the smallest
-			min_distance = distance[0]
-			for l in range(len(distance)):
-				self.assertLessEqual(min_distance, distance[l], "The order of data is wrong")
+			#compare all distance with the previous distance, the previous one should be smaller
+	        for l in range(len(distance)):
+	            if (l != 0):
+	                self.assertLessEqual(distance[l-1], distance[l], "The order of data is wrong")
 
 if __name__ == '__main__':
 	unittest.main()
