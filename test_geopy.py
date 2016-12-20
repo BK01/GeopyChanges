@@ -26,7 +26,7 @@ class GeopyTestCases(unittest.TestCase):
 
 		self.address2 = "Mackenzie" #static address for DataBC only
 		
-		self.userlocation = (59.8585107,17.6368508)
+		self.userlocation = (59.8585107,17.6368508) #static data taken from google map, based on our location at Uppsala
 
 		self.addrNone = "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba" #non-existing address
 		self.scheme = "https"
@@ -93,8 +93,8 @@ class GeopyTestCases(unittest.TestCase):
 		self.photonapi = "https://photon.komoot.de/api"
 		self.geolocators.append(self.geolocator10)
 		
-		#set up for vincenty distance test cases
-		self.myLocation = Point(59.849904, 17.621000)
+		#set up for vincenty distance test cases, using static data that we put manually
+		self.myLocation = Point(59.849904, 17.621000) 
 		self.northPole = Point(90.0, 0.0)
 		self.southPole = Point(-90.0, 0.0)
 		self.antiPodal1 = Point(0.0, 0.0)
@@ -195,7 +195,7 @@ class GeopyTestCases(unittest.TestCase):
 		
 	def testDataTypeNone(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(2)
+
 			#without userlocation
 			location = self.geolocators[gl].geocode(self.addrNone)
 			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
@@ -206,8 +206,7 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testDataTypeSingle(self):		
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2)
 			else:
@@ -222,12 +221,10 @@ class GeopyTestCases(unittest.TestCase):
 			self.assertIs(type(location.longitude), float, "longitude is not of type float! " + str(gl))
 			self.assertIs(type(location.altitude), float, "altitude is not of type float! " + str(gl))
 			self.assertIs(type(location.raw), dict, "raw is not of type dict! " + str(gl))
-			#print(location)
 	
 	def testDataTypeMultiple(self):
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if (type(self.geolocators[gl]) == DataBC):
 				location = self.geolocators[gl].geocode(self.address2, 25, 0, "any", False)
 			elif (type(self.geolocators[gl]) == OpenCage):
@@ -249,8 +246,7 @@ class GeopyTestCases(unittest.TestCase):
 			
 	def testAddressSingle(self):
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2)	
 			else:
@@ -274,8 +270,7 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testAddressMultiple(self):
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2,exactly_one=False)	
 			else:
@@ -309,8 +304,7 @@ class GeopyTestCases(unittest.TestCase):
 			
 	def testAddressSingleChanges(self):
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=True)	
 			else:
@@ -336,8 +330,7 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testAddressMultipleChanges(self):
 		for gl in range(len(self.geolocators)):
-			#print self.geolocators[gl]
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			else:
@@ -394,7 +387,7 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testOrderedData(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(2)
+			time.sleep(5)
 			if gl == 4:
 				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			else:
@@ -409,13 +402,12 @@ class GeopyTestCases(unittest.TestCase):
 	        for l in range(len(distance)):
 	            if (l != 0):
 	                self.assertLessEqual(distance[l-1], distance[l], "The order of data is wrong")
-		def testLenData(self):
-			for gl in range(len(self.geolocators)):
-				time.sleep(5)
-				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)
-				print len(location)
-				print len(self.geolocators[gl].temparray)
-				self.assertEqual(len(self.geolocators[gl].temparray), len(location), "The length is not the same")
+	
+	def testLenData(self):
+		for gl in range(len(self.geolocators)):
+			time.sleep(5)
+			location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)
+			self.assertEqual(len(self.geolocators[gl].temparray), len(location), "The length is not the same")
 
 if __name__ == '__main__':
 	unittest.main()
