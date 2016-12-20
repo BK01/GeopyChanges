@@ -126,15 +126,19 @@ class GeocodeFarm(Geocoder):
     def parse_code(results):
         """
         Parse each resource.
-        """
-
-	places=[]
+        """       
+        #status_result = results.get("STATUS", {}) # Changed
+        #api_call_no_results = status_result.get("status") == "FAILED, NO_RESULTS" # Changed
+        #if api_call_no_results: # Changed
+        #    return Location(None, (None, None), None) # Changed
+        
+        places=[]
         for result in results.get('RESULTS'):
             coordinates = result.get('COORDINATES', {})
-            #address = result.get('ADDRESS', {})
+            address = result.get('ADDRESS', {})
             latitude = coordinates.get('latitude', None)
             longitude = coordinates.get('longitude', None)
-            placename = result.get('formatted_address', None)
+            placename = result.get('formatted_address', None) # Changed!
             if placename is None:
                 placename = address.get('address', None)
             if latitude and longitude:
@@ -143,26 +147,33 @@ class GeocodeFarm(Geocoder):
             places.append(Location(placename, (latitude, longitude), result))
         return places
 
-    def _parse_json(self,api_result,userlocation, exactly_one):
-	self.temparray = []
+    def _parse_json(self,api_result, userlocation, exactly_one):
+        self.temparray = []
         if api_result is None:
             return None
         geocoding_results = api_result["geocoding_results"]
+        
+        status_result = geocoding_results.get("STATUS", {}) # Changed
+        
+        api_call_no_results = status_result.get("status") == "FAILED, NO_RESULTS" # Changed
+        if api_call_no_results: # Changed
+            return None # Changed
+        
         self._check_for_api_errors(geocoding_results)
 
         self.temparray = self.parse_code(geocoding_results)
-	if userlocation is None:
-		if exactly_one is True:
-		    return self.temparray[0]
-		else:
-		    return self.temparray
-	else:
-		resultplace = Calculation.calculations(userlocation,self.temparray)
-
-		if exactly_one:
-		    	return resultplace[0]
-		else:
-		    	return resultplace
+        if userlocation is None:
+        	if exactly_one is True:
+        	    return self.temparray[0]
+        	else:
+        	    return self.temparray
+        else:
+        	resultplace = Calculation.calculations(userlocation,self.temparray)
+        
+        	if exactly_one:
+        	    	return resultplace[0]
+        	else:
+        	    	return resultplace
 
     @staticmethod
     def _check_for_api_errors(geocoding_results):
@@ -171,6 +182,7 @@ class GeocodeFarm(Geocoder):
         in the api response.
         """
         status_result = geocoding_results.get("STATUS", {})
+        
         api_call_success = status_result.get("status", "") == "SUCCESS"
         if not api_call_success:
             access_error = status_result.get("access")
