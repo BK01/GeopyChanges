@@ -409,6 +409,13 @@ class GeopyTestCases(unittest.TestCase):
 	        for l in range(len(distance)):
 	            if (l != 0):
 	                self.assertLessEqual(distance[l-1], distance[l], "The order of data is wrong")
+		def testLenData(self):
+			for gl in range(len(self.geolocators)):
+				time.sleep(5)
+				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)
+				print len(location)
+				print len(self.geolocators[gl].temparray)
+				self.assertEqual(len(self.geolocators[gl].temparray), len(location), "The length is not the same")
 
 if __name__ == '__main__':
 	unittest.main()
