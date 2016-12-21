@@ -128,8 +128,8 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
             exception. Set this only if you wish to override, on this call
             only, the value set during the geocoder's initialization.
         """
-        #using different url, depend on activating searching based on user location or not
-        if userlocation is None:
+        #using different url, depend on activating multiple results based on exactly_one flag
+        if exactly_one:
             params = {'text': query, 'maxLocations':1, 'f': 'json'}
             url = "?".join((self.api, urlencode(params)))
         else:
@@ -150,7 +150,7 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
 
         # Success; convert from the ArcGIS JSON format.
 	self.temparray=[]
-        if userlocation is None:
+        if exactly_one:
             if not len(response['locations']):
                 return None
             self.temparray = []
@@ -161,26 +161,24 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
                         resource['name'], (geometry['y'], geometry['x']), resource
                     )
                 )
+            return self.temparray[0]
 
-    	    if exactly_one is True:
-    	       return self.temparray[0]
-    	    return self.temparray
-
-        else:
-            if not len(response['candidates']):
-                return None
-            self.temparray = []
-            for resource in response['candidates']:
-                geometry = resource['location']
-                self.temparray.append(
-                    Location(
-                        resource['address'], (geometry['y'], geometry['x']), resource
-                    )
+        if not len(response['candidates']):
+            return None
+        self.temparray = []
+        for resource in response['candidates']:
+            geometry = resource['location']
+            self.temparray.append(
+                Location(
+                    resource['address'], (geometry['y'], geometry['x']), resource
                 )
-	    resultplace = Calculation.calculations(userlocation,self.temparray)
-	    if exactly_one is True:
-    	       return resultplace[0]
+            )
+            
+        if userlocation != None:
+            resultplace = Calculation.calculations(userlocation, self.temparray)
     	    return resultplace
+        else:
+            return self.temparray
 
     def reverse(self, query, exactly_one=True, timeout=None, # pylint: disable=R0913,W0221
                 distance=None, wkid=DEFAULT_WKID):
