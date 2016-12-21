@@ -196,7 +196,7 @@ class GeopyTestCases(unittest.TestCase):
 	def testDataTypeNone(self):
 		for gl in range(len(self.geolocators)):
 			#time.sleep(2)
-			location = self.geolocators[gl].geocode(query=self.addrNone) #, timeout=2)
+			location = self.geolocators[gl].geocode(query=self.addrNone, timeout=2)
 			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
 
 	def testDataTypeSingle(self):	
@@ -205,7 +205,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2) #, timeout=2)
 			else:
-				location = self.geolocators[gl].geocode(query=self.address) #, timeout=2)
+				location = self.geolocators[gl].geocode(query=self.address, timeout=2)
 			
 			self.assertIsNotNone(location, "location not found! " + str(gl))
 			self.assertIsInstance(location, Location, "location is not an instance of class Location! " + str(gl))
@@ -223,7 +223,7 @@ class GeopyTestCases(unittest.TestCase):
 			if (type(self.geolocators[gl]) == DataBC):
 				location = self.geolocators[gl].geocode(query=self.address2, exactly_one=False) #, timeout=2)
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False) #, timeout=2)
+				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False, timeout=2)
 				
 			self.assertIsNotNone(location, "location not found! " + str(gl))
 			# Multiple results stored as a list
@@ -241,7 +241,7 @@ class GeopyTestCases(unittest.TestCase):
 		for gl in range(len(self.geolocators)):
 			#time.sleep(2)
 			#with userlocation
-			location = self.geolocators[gl].geocode(query=self.addrNone, userlocation=self.userlocation, exactly_one=False) #, timeout=2)
+			location = self.geolocators[gl].geocode(query=self.addrNone, userlocation=self.userlocation, exactly_one=False, timeout=2)
 			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
 			
 	def testDataTypeSingleChanges(self):		
@@ -250,7 +250,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation) #, timeout=2)
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation) #, timeout=2)
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, timeout=2)
 			
 			self.assertIsNotNone(location, "location not found! " + str(gl))
 			self.assertIsInstance(location, Location, "location is not an instance of class Location! " + str(gl))
@@ -268,7 +268,7 @@ class GeopyTestCases(unittest.TestCase):
 			if (type(self.geolocators[gl]) == DataBC):
 				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False) #, timeout=2)
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False) #, timeout=2)
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False, timeout=2)
 				
 			self.assertIsNotNone(location, "location not found! " + str(gl))
 			# Multiple results stored as a list
@@ -288,7 +288,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2) #, timeout=2)	
 			else:
-				location = self.geolocators[gl].geocode(query=self.address) #, timeout=2)		
+				location = self.geolocators[gl].geocode(query=self.address, timeout=2)		
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
@@ -312,7 +312,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, exactly_one=False) #, timeout=2)	
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False) #, timeout=2)	
+				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False, timeout=2)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
@@ -349,7 +349,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation) #, timeout=2)	
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation) #, timeout=2)			
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, timeout=2)			
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
@@ -373,7 +373,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False) #, timeout=2)	
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False) #, timeout=2)	
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False, timeout=2)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
@@ -440,7 +440,7 @@ class GeopyTestCases(unittest.TestCase):
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False) #, timeout=2)	
 			else:
-				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False) #, timeout=2)	
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False, timeout=2)	
 
 			#put all distance in array
 			distance = []
@@ -458,10 +458,10 @@ class GeopyTestCases(unittest.TestCase):
 			#time.sleep(2)				
 			if gl == 4:
 				location = self.geolocators[gl].geocode(query=self.address2, exactly_one=False) #, timeout=2)
-				ordLocation = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False) #, timeout=2)	
+				ordLocation = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False, timeout=2)	
 			else:
 				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False) #, timeout=2)
-				ordLocation = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False) #, timeout=2)
+				ordLocation = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False, timeout=2)
 			
 			#Test if original and ordered array have the same size
 			self.assertEqual(len(location), len(ordLocation), "The size of location arrays are not the same!")	
