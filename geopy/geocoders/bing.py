@@ -41,7 +41,7 @@ class Bing(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-	    temparray=[],
+            temparray=[],
         ):  # pylint: disable=R0913
         """Initialize a customized Bing geocoder with location-specific
         address information and your Bing Maps API key.
@@ -212,7 +212,7 @@ class Bing(Geocoder):
                 raise GeocoderServiceError(err)
 
         resources = doc['resourceSets'][0]['resources']
-        if resources is None or not len(resources): # pragma: no cover
+        if resources is None or not len(resources):
             return None
 
         def parse_resource(resource):

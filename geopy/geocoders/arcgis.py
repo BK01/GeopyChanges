@@ -114,7 +114,7 @@ class ArcGIS(Geocoder):  # pylint: disable=R0921,R0902,W0223
         )
         return self._base_call_geocoder(request, timeout=timeout)
 
-    def geocode(self, query, exactly_one=True, timeout=None,userlocation=None):
+    def geocode(self, query, exactly_one=True, timeout=None, userlocation=None):
         """
         Geocode a location query.
 

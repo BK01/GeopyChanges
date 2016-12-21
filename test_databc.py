@@ -39,6 +39,12 @@ class GeopyTestCases(unittest.TestCase):
 			location = self.geolocators[gl].geocode(self.addrNone)
 			self.assertIsNone(location, "location found! " + str(gl) + " " + str(self.geolocators[gl]))
 			
+	def testDataTypeNoneChanges(self):
+		for gl in range(len(self.geolocators)):
+			time.sleep(2)
+			location = self.geolocators[gl].geocode(self.addrNone, userlocation=self.userlocation)
+			self.assertIsNone(location, "location found! " + str(gl) + " " + str(self.geolocators[gl]))
+			
 	def testDataTypeSingle(self):		
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
@@ -94,14 +100,14 @@ class GeopyTestCases(unittest.TestCase):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
-			location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=True)	
+			location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=True)	
 			self.assertIn(self.address2,location.raw['fullAddress'])
 			
 	def testAddressMultipleChanges(self):
 		for gl in range(len(self.geolocators)):
 			#print self.geolocators[gl]
 			time.sleep(2)
-			location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
+			location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			for gl1 in range(len(location)):
 				if self.address2 in location[gl1].raw['fullAddress']:
 					self.assertIn(self.address2,location[gl1].raw['fullAddress'])
@@ -109,7 +115,7 @@ class GeopyTestCases(unittest.TestCase):
 	def testOrderedData(self):
 		for gl in range(len(self.geolocators)):
 			time.sleep(2)
-			location = self.geolocators[gl].geocode(self.address2,self.userlocation,exactly_one=False)	
+			location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
 			
 			#put all distance in array
 			distance = []

@@ -28,7 +28,7 @@ class GeocodeFarm(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-	    temparray=[]
+            temparray=[]
         ):  # pylint: disable=R0913
         """
         Create a geocoder for GeocodeFarm.
@@ -60,7 +60,7 @@ class GeocodeFarm(Geocoder):
             "%s://www.geocode.farm/v3/json/reverse/" % self.scheme
         )
 
-    def geocode(self, query,exactly_one=True, timeout=None, userlocation=None):
+    def geocode(self, query, exactly_one=True, timeout=None, userlocation=None):
         """
         Geocode a location query.
 
@@ -126,12 +126,7 @@ class GeocodeFarm(Geocoder):
     def parse_code(results):
         """
         Parse each resource.
-        """       
-        #status_result = results.get("STATUS", {}) # Changed
-        #api_call_no_results = status_result.get("status") == "FAILED, NO_RESULTS" # Changed
-        #if api_call_no_results: # Changed
-        #    return Location(None, (None, None), None) # Changed
-        
+        """        
         places=[]
         for result in results.get('RESULTS'):
             coordinates = result.get('COORDINATES', {})

@@ -6,7 +6,6 @@ from geopy.geocoders import GeocodeFarm
 from geopy.geocoders import GeoNames
 from geopy.geocoders import Mapzen
 from geopy.geocoders import OpenCage
-#from geopy.geocoders import OpenMapQuest
 from geopy.geocoders import Nominatim
 from geopy.geocoders import Photon
 from geopy.location import Location
@@ -15,7 +14,7 @@ from geopy.point import Point
 
 import math
 import types
-import time
+#import time
 
 import unittest
 
@@ -26,7 +25,7 @@ class GeopyTestCases(unittest.TestCase):
 
 		self.address2 = "Mackenzie" #static address for DataBC only
 		
-		self.userlocation = (59.8585107,17.6368508) #static data taken from google map, based on our location at Uppsala
+		self.userlocation = (59.8585107,17.6368508)
 
 		self.addrNone = "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba" #non-existing address
 		self.scheme = "https"
@@ -93,8 +92,8 @@ class GeopyTestCases(unittest.TestCase):
 		self.photonapi = "https://photon.komoot.de/api"
 		self.geolocators.append(self.geolocator10)
 		
-		#set up for vincenty distance test cases, using static data that we put manually
-		self.myLocation = Point(59.849904, 17.621000) 
+		#set up for vincenty distance test cases
+		self.myLocation = Point(59.849904, 17.621000)
 		self.northPole = Point(90.0, 0.0)
 		self.southPole = Point(-90.0, 0.0)
 		self.antiPodal1 = Point(0.0, 0.0)
@@ -195,22 +194,17 @@ class GeopyTestCases(unittest.TestCase):
 		
 	def testDataTypeNone(self):
 		for gl in range(len(self.geolocators)):
-
-			#without userlocation
-			location = self.geolocators[gl].geocode(self.addrNone)
+			#time.sleep(2)
+			location = self.geolocators[gl].geocode(query=self.addrNone)
 			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
 
-			#with userlocation
-			location = self.geolocators[gl].geocode(self.addrNone, self.userlocation)
-			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
-
-	def testDataTypeSingle(self):		
+	def testDataTypeSingle(self):	
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2)
+				location = self.geolocators[gl].geocode(query=self.address2)
 			else:
-				location = self.geolocators[gl].geocode(self.address)
+				location = self.geolocators[gl].geocode(query=self.address)
 			
 			self.assertIsNotNone(location, "location not found! " + str(gl))
 			self.assertIsInstance(location, Location, "location is not an instance of class Location! " + str(gl))
@@ -224,15 +218,14 @@ class GeopyTestCases(unittest.TestCase):
 	
 	def testDataTypeMultiple(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if (type(self.geolocators[gl]) == DataBC):
-				location = self.geolocators[gl].geocode(self.address2, 25, 0, "any", False)
-			elif (type(self.geolocators[gl]) == OpenCage):
-				location = self.geolocators[gl].geocode(self.address, None, None, None, False)
+				location = self.geolocators[gl].geocode(query=self.address2, exactly_one=False)
 			else:
-				location = self.geolocators[gl].geocode(self.address, False)
+				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False)
 				
 			self.assertIsNotNone(location, "location not found! " + str(gl))
+			# Multiple results stored as a list
 			self.assertIs(type(location), list, "location is single! " + str(gl))
 			for l in range(len(location)):
 				self.assertIsInstance(location[l], Location, "location is not an instance of class Location! " + str(gl))
@@ -242,15 +235,59 @@ class GeopyTestCases(unittest.TestCase):
 				self.assertIs(type(location[l].longitude), float, "longitude is not of type float! " + str(gl))
 				self.assertIs(type(location[l].altitude), float, "altitude is not of type float! " + str(gl))
 				self.assertIs(type(location[l].raw), dict, "raw is not of type dict! " + str(gl))
-				#print(location[l])
+				
+	def testDataTypeNoneChanges(self):
+		for gl in range(len(self.geolocators)):
+			#time.sleep(2)
+			#with userlocation
+			location = self.geolocators[gl].geocode(query=self.addrNone, userlocation=self.userlocation)
+			self.assertIsNone(location, "location found! " + str(self.geolocators[gl]))
+			
+	def testDataTypeSingleChanges(self):		
+		for gl in range(len(self.geolocators)):
+			#time.sleep(2)
+			if gl == 4:
+				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation)
+			else:
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation)
+			
+			self.assertIsNotNone(location, "location not found! " + str(gl))
+			self.assertIsInstance(location, Location, "location is not an instance of class Location! " + str(gl))
+			self.assertIsNot(type(location), list, "location is multiple! " + str(gl))
+			self.assertIs(type(location), Location, "location is not of type Location! " + str(gl))
+			self.assertIs(type(location.address), unicode, "address is not of type unicode! " + str(gl) + " " + str(self.geolocators[gl]))
+			self.assertIs(type(location.latitude), float, "latitude is not of type float! " + str(gl))
+			self.assertIs(type(location.longitude), float, "longitude is not of type float! " + str(gl))
+			self.assertIs(type(location.altitude), float, "altitude is not of type float! " + str(gl))
+			self.assertIs(type(location.raw), dict, "raw is not of type dict! " + str(gl))
+	
+	def testDataTypeMultipleChanges(self):
+		for gl in range(len(self.geolocators)):
+			#time.sleep(2)
+			if (type(self.geolocators[gl]) == DataBC):
+				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False)
+			else:
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False)
+				
+			self.assertIsNotNone(location, "location not found! " + str(gl))
+			# Multiple results stored as a list
+			self.assertIs(type(location), list, "location is single! " + str(gl))
+			for l in range(len(location)):
+				self.assertIsInstance(location[l], Location, "location is not an instance of class Location! " + str(gl))
+				self.assertIs(type(location[l]), Location, "location is not of type Location! " + str(gl))
+				self.assertIs(type(location[l].address), unicode, "address is not of type unicode! " + str(gl) + " " + str(self.geolocators[gl]))
+				self.assertIs(type(location[l].latitude), float, "latitude is not of type float! " + str(gl))
+				self.assertIs(type(location[l].longitude), float, "longitude is not of type float! " + str(gl))
+				self.assertIs(type(location[l].altitude), float, "altitude is not of type float! " + str(gl))
+				self.assertIs(type(location[l].raw), dict, "raw is not of type dict! " + str(gl))
 			
 	def testAddressSingle(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2)	
+				location = self.geolocators[gl].geocode(query=self.address2)	
 			else:
-				location = self.geolocators[gl].geocode(self.address)			
+				location = self.geolocators[gl].geocode(query=self.address)			
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
@@ -270,11 +307,11 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testAddressMultiple(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address2, exactly_one=False)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address, exactly_one=False)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
@@ -304,11 +341,11 @@ class GeopyTestCases(unittest.TestCase):
 			
 	def testAddressSingleChanges(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=True)	
+				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=True)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=True)			
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=True)			
 			if gl in (0,5):
 				self.assertIn(self.address,location.raw['formatted_address'])
 			elif gl == 3:
@@ -330,11 +367,11 @@ class GeopyTestCases(unittest.TestCase):
 
 	def testAddressMultipleChanges(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False)	
 			if gl in (0,5):
 				for gl1 in range(len(location)):
 					self.assertIn(self.address,location[gl1].raw['formatted_address'])
@@ -364,34 +401,40 @@ class GeopyTestCases(unittest.TestCase):
 				for gl1 in range(len(location)):
 					if self.address in location[gl1].raw['properties']['name']:
 						self.assertIn(self.address,location[gl1].raw['properties']['name'])		
-						
+	
+	#Test if the result is of type Distance					
 	def testDistanceType(self):
 		self.assertIsNot(type(vincenty(1)), Distance, "Distance does not have the right object type")
 	
+	#Test the distance when both given points are the same
 	def testZeroDistance(self):
 		self.assertEqual(vincenty(self.myLocation, self.myLocation), 0.0, "Distance is not zero!")
 		
+	#Test the distance when the given points are not same
 	def testNonZeroDistance(self):
 		self.assertGreater(vincenty(self.myLocation, Point(0-self.myLocation[0], self.myLocation[1])), 0, 
 			"Distance is not greater than zero!")
-		
+	
+	#Test that the distance between poles is half of the Earth perimeter	
 	def testHalfEarthPerimeterBtwPoles(self):
 		self.assertAlmostEquals(first=vincenty(self.northPole, self.southPole), second=self.earthCircunference/2, 
 		msg="Distance between Earth poles are not correct!", delta=20.0)
 	
+	#Test the not converging issue for anti-podal points
 	def testAntiPodalException(self):
 		self.assertRaises(ValueError, vincenty, self.antiPodal1, self.antiPodal2)
-		
+	
+	#Test the module handles positive and negative coordinates
 	def testPosNegSupport(self):
 		self.assertEqual(vincenty((180, 0), (-180, 0)), 0, "Distance does not support positive and negative coordinates")
 
 	def testOrderedData(self):
 		for gl in range(len(self.geolocators)):
-			time.sleep(5)
+			#time.sleep(2)
 			if gl == 4:
-				location = self.geolocators[gl].geocode(self.address2,userlocation=self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address2, userlocation=self.userlocation, exactly_one=False)	
 			else:
-				location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)	
+				location = self.geolocators[gl].geocode(query=self.address, userlocation=self.userlocation, exactly_one=False)	
 
 			#put all distance in array
 			distance = []
@@ -402,12 +445,6 @@ class GeopyTestCases(unittest.TestCase):
 	        for l in range(len(distance)):
 	            if (l != 0):
 	                self.assertLessEqual(distance[l-1], distance[l], "The order of data is wrong")
-	
-	def testLenData(self):
-		for gl in range(len(self.geolocators)):
-			time.sleep(5)
-			location = self.geolocators[gl].geocode(self.address,userlocation=self.userlocation,exactly_one=False)
-			self.assertEqual(len(self.geolocators[gl].temparray), len(location), "The length is not the same")
 
 if __name__ == '__main__':
 	unittest.main()

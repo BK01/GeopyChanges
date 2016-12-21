@@ -69,7 +69,7 @@ class Photon(Geocoder):  # pylint: disable=W0223
     def geocode(
             self,
             query,
-	    exactly_one=True,
+            exactly_one=True,
             timeout=None,
             location_bias=None,
             language=False,
@@ -204,8 +204,9 @@ class Photon(Geocoder):  # pylint: disable=W0223
         Parse display name, latitude, and longitude from a JSON response.
         """
         self.temparray=[]
-        if not len(resources):  # pragma: no cover
+        if not len(resources['features']):
             return None
+        
         if userlocation is None:
             if exactly_one:
                 return cls.parse_resource(resources['features'][0])

@@ -193,7 +193,7 @@ class Nominatim(Geocoder):
         url = "?".join((self.api, urlencode(params)))
         logger.debug("%s.geocode: %s", self.__class__.__name__, url)
         return self._parse_json(
-            self._call_geocoder(url, timeout=timeout),userlocation, exactly_one
+            self._call_geocoder(url, timeout=timeout), userlocation, exactly_one
         )
 
     def reverse(
@@ -264,7 +264,7 @@ class Nominatim(Geocoder):
             longitude = float(longitude)
         return Location(placename, (latitude, longitude), place)
 
-    def _parse_json(self, places,userlocation, exactly_one):
+    def _parse_json(self, places, userlocation, exactly_one):
 	temparray=[]
         if places is None:
             return None
@@ -272,17 +272,17 @@ class Nominatim(Geocoder):
             places = [places]
         if not len(places):
             return None
-	if userlocation is None:
-		if exactly_one:
-            		return self.parse_code(places[0])
-        	else:
-			return [self.parse_code(place) for place in places]
-	else:
-		for place in places:
-			temparray.append(self.parse_code(place))
-		resultplace = Calculation.calculations(userlocation,temparray)
-
-		if exactly_one:
-		    	return resultplace[0]
-		else:
-		    	return resultplace
+    	if userlocation is None:
+    		if exactly_one:
+                		return self.parse_code(places[0])
+            	else:
+    			return [self.parse_code(place) for place in places]
+    	else:
+    		for place in places:
+    			temparray.append(self.parse_code(place))
+    		resultplace = Calculation.calculations(userlocation,temparray)
+    
+    		if exactly_one:
+    		    	return resultplace[0]
+    		else:
+    		    	return resultplace

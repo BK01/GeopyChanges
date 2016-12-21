@@ -47,8 +47,8 @@ class DataBC(Geocoder):
             set_back=0,
             location_descriptor='any',
             exactly_one=True,
-            timeout=5,
-			userlocation = None
+            timeout=None,
+			userlocation=None
         ):
         """
         Geocode a location query.
@@ -98,20 +98,20 @@ class DataBC(Geocoder):
         response = self._call_geocoder(url, timeout=timeout)
 
         # Success; convert from GeoJSON
-        if not len(response['features']):
-            return None
         self.temparray = []
-	for feature in response['features']:
-		    self.temparray.append(self._parse_feature(feature))
-	if userlocation is None:		
-		if exactly_one is True:
-		    return self.temparray[0]
-		return self.temparray
-	else:
-		resultplace = Calculation.calculations(userlocation,self.temparray)
-		if exactly_one is True:
-		    return resultplace[0]
-		return resultplace
+        for feature in response['features']:
+    	    self.temparray.append(self._parse_feature(feature))
+        if self.temparray[0] is None:
+            return None
+        if userlocation is None:		
+        	if exactly_one is True:
+        	    return self.temparray[0]
+        	return self.temparray
+        else:
+        	resultplace = Calculation.calculations(userlocation,self.temparray)
+        	if exactly_one is True:
+        	    return resultplace[0]
+        	return resultplace
 
     @staticmethod
     def _parse_feature(feature):

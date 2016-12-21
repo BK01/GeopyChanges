@@ -160,7 +160,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             components=None,
             language=None,
             sensor=False,	 
-			userlocation= None
+			userlocation=None
         ):  # pylint: disable=W0221,R0913
         """
         Geocode a location query.
@@ -335,7 +335,7 @@ class GoogleV3(Geocoder):  # pylint: disable=R0902
             )
         return tz
 
-    def _parse_json(self, page,userlocation, exactly_one=False):
+    def _parse_json(self, page, userlocation, exactly_one=False):
         '''Returns location, (latitude, longitude) from json feed.'''
 	self.temparray = []
         places = page.get('results', [])

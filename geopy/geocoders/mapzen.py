@@ -30,7 +30,7 @@ class Mapzen(Geocoder):
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-			temparray=[]
+			temparray=[],
     ):  # pylint: disable=R0913
         """
         :param string format_string: String containing '%s' where the

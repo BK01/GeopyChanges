@@ -34,7 +34,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             timeout=DEFAULT_TIMEOUT,
             proxies=None,
             user_agent=None,
-			temparray=[]
+			temparray=[],
         ):
         """
         :param string country_bias:
@@ -70,7 +70,7 @@ class GeoNames(Geocoder): # pylint: disable=W0223
             "%s://api.geonames.org/findNearbyPlaceNameJSON" % self.scheme
         )
 
-    def geocode(self, query, exactly_one=True, timeout=None,userlocation=None): # pylint: disable=W0221
+    def geocode(self, query, exactly_one=True, timeout=None, userlocation=None): # pylint: disable=W0221
         """
         Geocode a location query.
 
