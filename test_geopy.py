@@ -8,6 +8,7 @@ from geopy.geocoders import Mapzen
 from geopy.geocoders import OpenCage
 from geopy.geocoders import Nominatim
 from geopy.geocoders import Photon
+from geopy.geocoders import Calculation
 from geopy.location import Location
 from geopy.distance import (vincenty, EARTH_RADIUS, Distance)
 from geopy.point import Point
@@ -431,6 +432,8 @@ class GeopyTestCases(unittest.TestCase):
 		self.assertEqual(vincenty((180, 0), (-180, 0)), 0, "Distance does not support positive and negative coordinates")
 
 	#Tests for Calculation class
+	
+	#Testing right ordering
 	def testOrderedData(self):
 		for gl in range(len(self.geolocators)):
 			#time.sleep(2)
@@ -448,7 +451,8 @@ class GeopyTestCases(unittest.TestCase):
 	        for l in range(len(distance)):
 	            if (l != 0):
 	                self.assertLessEqual(distance[l-1], distance[l], "The order of data is wrong")
-	                
+	
+	#Testing data consistency and integrity                
 	def testDataIntegrity(self):
 		for gl in range(len(self.geolocators)):
 			#time.sleep(2)				
@@ -466,5 +470,10 @@ class GeopyTestCases(unittest.TestCase):
 			for l in range(len(location)):
 				self.assertIn(location[l], ordLocation, "Location is missing in ordered array!")
 
+	#Testing right handling of convergence error
+	def testAntiPodalOrdering(self):
+		resultplace = Calculation.calculations(self.antiPodal1, [self.antiPodal2])
+		self.assertEqual(resultplace, [self.antiPodal2], "Antipodal location is not the same!")
+	
 if __name__ == '__main__':
 	unittest.main()
