@@ -16,8 +16,8 @@ __all__ = ("DataBC", )
 
 class DataBC(Geocoder):
     """
-    Geocoder using the Physical Address Geocoder from DataBC. Documentation at:
-        http://www.data.gov.bc.ca/dbc/geographic/locate/geocoding.page
+    Geocoder using the BC Address Geocoder from DataBC. Documentation at:
+        https://www2.gov.bc.ca/gov/content?id=118DD57CD9674D57BDBD511C2E78DC0D
     """
 
     def __init__(self, scheme=DEFAULT_SCHEME, timeout=DEFAULT_TIMEOUT, proxies=None, user_agent=None,temparray=[]):
@@ -38,7 +38,7 @@ class DataBC(Geocoder):
         super(DataBC, self).__init__(
             scheme=scheme, timeout=timeout, proxies=proxies, user_agent=user_agent
         )
-        self.api = '%s://apps.gov.bc.ca/pub/geocoder/addresses.geojson' % self.scheme
+        self.api = '%s://geocoder.api.gov.bc.ca/addresses.geojson' % self.scheme
 
     def geocode(
             self,
