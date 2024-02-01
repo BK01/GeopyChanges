@@ -55,7 +55,7 @@ class GeopyTestCases(unittest.TestCase):
 		
 		#set up for Data BC
 		self.geolocator4 = DataBC()
-		self.databcurlapi = "https://apps.gov.bc.ca/pub/geocoder/addresses.geojson"
+		self.databcurlapi = "https://geocoder.api.gov.bc.ca/addresses.geojson"
 		self.geolocators.append(self.geolocator4)
 		
 		#set up for geocodeFarm
